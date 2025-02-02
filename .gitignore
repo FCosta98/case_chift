@@ -2,3 +2,4 @@
 __pycache__/
 .env
 .pytest_cache
+chift_case_key.pem

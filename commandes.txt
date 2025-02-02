@@ -6,6 +6,7 @@ run db mig :            alembic upgrade head
 create requirements :   pip freeze > requirements.txt
 
 build image :           docker build -t odoo_sync .
+                        docker buildx build --platform linux/amd64 -t odoo_sync . 
 run image :             docker run --rm odoo_sync
 
 update cron :           crontab -e 
@@ -18,5 +19,15 @@ command cron:
 
 
 
+connect to EC2 server: ssh -i chift_case_key.pem ubuntu@13.60.45.245
 
 
+docker buildx build --platform linux/amd64 -t odoo_sync . 
+docker save -o odoo_sync.tar odoo_sync
+scp -i chift_case_key.pem odoo_sync.tar ubuntu@13.60.45.245:/home/ubuntu
+ssh -i chift_case_key.pem ubuntu@13.60.45.245
+sudo docker load -i odoo_sync.tar
+sudo docker run --platform linux/amd64 -d -p 8000:8000 --name odoo_sync-container odoo_sync:latest
+
+sudo systemctl restart cron
+*/1 * * * * /usr/bin/docker run --rm odoo_sync >> /home/ubuntu/cron.log 2>&1

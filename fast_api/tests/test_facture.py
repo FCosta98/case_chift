@@ -6,6 +6,7 @@ from main import app
 from models.models import Base, Facture
 import pytest
 import os
+from config import API_KEY
 
 # Create a test database (in-memory SQLite for simplicity)
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
@@ -30,7 +31,7 @@ client = TestClient(app)
 
 # 1️ Test: Create a facture and verify it exists in the list
 def test_create_facture():
-    response = client.post("/factures/", json={"title": "Test Facture", "company": "Test Company", "amount": 99.99})
+    response = client.post("/factures/", json={"title": "Test Facture", "company": "Test Company", "amount": 99.99}, headers={"X-API-Key": API_KEY})
     assert response.status_code == 200
     created_facture = response.json()
     assert created_facture["title"] == "Test Facture"
@@ -38,7 +39,7 @@ def test_create_facture():
     assert created_facture["amount"] == 99.99
 
     # Get all factures and check if the new one is in the list
-    response = client.get("/factures/")
+    response = client.get("/factures/", headers={"X-API-Key": API_KEY})
     assert response.status_code == 200
     factures = response.json()
     assert any(f["title"] == "Test Facture" for f in factures)
@@ -46,12 +47,12 @@ def test_create_facture():
 # 2️ Test: Retrieve a facture by its ID
 def test_get_facture_by_id():
     # First, create a facture
-    response = client.post("/factures/", json={"title": "Facture 2", "company": "Another Company", "amount": 150.75})
+    response = client.post("/factures/", json={"title": "Facture 2", "company": "Another Company", "amount": 150.75}, headers={"X-API-Key": API_KEY})
     assert response.status_code == 200
     facture_id = response.json()["id"]
 
     # Now retrieve it
-    response = client.get(f"/factures/{facture_id}")
+    response = client.get(f"/factures/{facture_id}", headers={"X-API-Key": API_KEY})
     assert response.status_code == 200
     facture = response.json()
     assert facture["id"] == facture_id

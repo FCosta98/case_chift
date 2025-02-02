@@ -6,6 +6,7 @@ from main import app
 from models.models import Base, Facture
 import pytest
 import os
+from config import API_KEY
 
 # Create a test database (in-memory SQLite for simplicity)
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
@@ -31,7 +32,7 @@ client = TestClient(app)
 # Test 1: Create a contact and verify it's created
 def test_create_contact():
     # Send the request to create a contact
-    response = client.post("/contacts/", json={"name": "John Doe", "email": "john.doe@example.com"})
+    response = client.post("/contacts/", json={"name": "John Doe", "email": "john.doe@example.com"}, headers={"X-API-Key": API_KEY})
     
     # Assert the response status code is 200 (success)
     assert response.status_code == 200
@@ -42,7 +43,7 @@ def test_create_contact():
     assert created_contact["email"] == "john.doe@example.com"
     
     # Verify that the contact exists in the database
-    response = client.get("/contacts/")
+    response = client.get("/contacts/", headers={"X-API-Key": API_KEY})
     contacts = response.json()
     assert len(contacts) > 0
     assert contacts[-1]["name"] == "John Doe"
@@ -51,12 +52,12 @@ def test_create_contact():
 # Test 2: Retrieve a contact by ID
 def test_get_contact_by_id():
     # Create a contact first
-    create_response = client.post("/contacts/", json={"name": "Jane Smith", "email": "jane.smith@example.com"})
+    create_response = client.post("/contacts/", json={"name": "Jane Smith", "email": "jane.smith@example.com"}, headers={"X-API-Key": API_KEY})
     created_contact = create_response.json()
     contact_id = created_contact["id"]
     
     # Retrieve the contact by ID
-    response = client.get(f"/contacts/{contact_id}")
+    response = client.get(f"/contacts/{contact_id}", headers={"X-API-Key": API_KEY})
     
     # Assert the response status code is 200 (success)
     assert response.status_code == 200
