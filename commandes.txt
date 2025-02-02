@@ -1,0 +1,22 @@
+lancer python env :     source chift_env/bin/activate
+
+create db migration :   alembic revision --autogenerate -m "Initial migration"
+run db mig :            alembic upgrade head
+
+create requirements :   pip freeze > requirements.txt
+
+build image :           docker build -t odoo_sync .
+run image :             docker run --rm odoo_sync
+
+update cron :           crontab -e 
+see cron tasks :        crontab -l
+clean cron :            crontab -r
+
+command cron:
+*/1 * * * * /usr/local/bin/docker run --rm odoo_sync >> /Users/costa/Documents/Projets_Perso/Informatique/case_chift/scripts/cron.log 2>&1
+
+
+
+
+
+
