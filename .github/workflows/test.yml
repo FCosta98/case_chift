@@ -26,6 +26,8 @@ jobs:
           pip install -r fast_api/requirements.txt
 
       - name: Run tests with pytest
+        env:
+          MYSECRET_API_KEY: "supersecretkey"
         run: |
           cd fast_api
           pytest --disable-warnings --maxfail=1
