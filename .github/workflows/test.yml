@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - master
       - develop  # Run tests before merging into these branches
 
 jobs:
