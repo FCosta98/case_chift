@@ -31,3 +31,5 @@ sudo docker run --platform linux/amd64 -d -p 8000:8000 --name odoo_sync-containe
 
 sudo systemctl restart cron
 */1 * * * * /usr/bin/docker run --rm odoo_sync >> /home/ubuntu/cron.log 2>&1
+
+test
