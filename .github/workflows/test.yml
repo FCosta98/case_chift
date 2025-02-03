@@ -28,6 +28,7 @@ jobs:
       - name: Run tests with pytest
         env:
           MYSECRET_API_KEY: "supersecretkey"
+          DATABASE_URL: "sqlite:///./test.db"
         run: |
           cd fast_api
           pytest --disable-warnings --maxfail=1
