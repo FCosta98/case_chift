@@ -18,8 +18,8 @@ DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 DB_NAME = os.getenv("DB_NAME")
 
-# conn = psycopg2.connect("dbname=case_chift_db user=postgres password=postgres host=localhost") # to use with python3 script_odoo.py
-# conn = psycopg2.connect("dbname=case_chift_db user=postgres password=postgres host=host.docker.internal") # to use for docker locally
+# conn = psycopg2.connect("dbname=case_chift_db user=postgres password=postgres host=localhost") # to use when run with python3 script_odoo.py
+# conn = psycopg2.connect("dbname=case_chift_db user=postgres password=postgres host=host.docker.internal") # to use to run with docker locally
 conn = psycopg2.connect(user=DB_USER, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT, dbname=DB_NAME) # to use for the deployed DB on supabase
 cur = conn.cursor()
 

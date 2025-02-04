@@ -5,15 +5,17 @@ run db mig :            alembic upgrade head
 
 create requirements :   pip freeze > requirements.txt
 
+run project :           uvicorn main:app --reload
+lancer les tests :      pytest
+
 build image :           docker build -t odoo_sync .
-                        docker buildx build --platform linux/amd64 -t odoo_sync . 
 run image :             docker run --rm odoo_sync
 
 update cron :           crontab -e 
 see cron tasks :        crontab -l
 clean cron :            crontab -r
 
-command cron:
+command cron en local:
 */1 * * * * /usr/local/bin/docker run --rm odoo_sync >> /Users/costa/Documents/Projets_Perso/Informatique/case_chift/scripts/cron.log 2>&1
 
 
@@ -22,12 +24,13 @@ command cron:
 connect to EC2 server: ssh -i chift_case_key.pem ubuntu@13.60.45.245
 
 
-docker buildx build --platform linux/amd64 -t odoo_sync . 
-docker save -o odoo_sync.tar odoo_sync
-scp -i chift_case_key.pem odoo_sync.tar ubuntu@13.60.45.245:/home/ubuntu
-ssh -i chift_case_key.pem ubuntu@13.60.45.245
-sudo docker load -i odoo_sync.tar
-sudo docker run --platform linux/amd64 -d -p 8000:8000 --name odoo_sync-container odoo_sync:latest
+build image for EC2 :       docker buildx build --platform linux/amd64 -t odoo_sync . 
+save image in .tar :        docker save -o odoo_sync.tar odoo_sync
+transfer tar to server :    scp -i chift_case_key.pem odoo_sync.tar ubuntu@13.60.45.245:/home/ubuntu
+connect to server via ssh : ssh -i chift_case_key.pem ubuntu@13.60.45.245
+load image:                 sudo docker load -i odoo_sync.tar
+run container :             sudo docker run --platform linux/amd64 -d -p 8000:8000 --name odoo_sync-container odoo_sync:latest
 
-sudo systemctl restart cron
+restart cron :              sudo systemctl restart cron
+command cron for EC2:
 */1 * * * * /usr/bin/docker run --rm odoo_sync >> /home/ubuntu/cron.log 2>&1
