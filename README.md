@@ -13,7 +13,7 @@ J'ai également mis à votre disposition un fichier `commandes.txt` qui contient
 
 ## 1. L’API FastAPI
 
-- **URL publique** : [https://case-chift.onrender.com/docs#/](https://case-chift.onrender.com/docs#/)
+- **URL publique** : [https://case-chift.onrender.com/docs#/](https://case-chift.onrender.com/docs)
 - **Run en local** (installer les librairies au préalable) :
   ```bash
   uvicorn main:app --reload
